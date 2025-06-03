@@ -5,6 +5,7 @@ import 'package:social_application/components/widget_main.dart';
 import 'package:social_application/cubit/login/login_cubit.dart';
 import 'package:social_application/cubit/register/register_cubit.dart';
 import 'package:social_application/cubit/register/register_state.dart';
+import 'package:social_application/layouts/social_layout.dart';
 
 import '../cubit/login/login_state.dart';
 
@@ -23,7 +24,9 @@ class SocialRegisterScreen extends StatelessWidget {
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
-          if (state is RegisterSuccessState) {}
+          if (state is CreateUserSuccess) {
+            navigateTo(context, const SocialLayout());
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -34,7 +37,7 @@ class SocialRegisterScreen extends StatelessWidget {
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  // mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Login',
                         style: Theme.of(context).textTheme.headlineMedium),
@@ -52,7 +55,7 @@ class SocialRegisterScreen extends StatelessWidget {
                       height: 16,
                     ),
                     defaultFormFiled(
-                      controller: emailController,
+                      controller: nameController,
                       type: TextInputType.name,
                       validate: (value) {
                         if (value!.isEmpty) {
@@ -66,7 +69,7 @@ class SocialRegisterScreen extends StatelessWidget {
                       height: 16,
                     ),
                     defaultFormFiled(
-                      controller: nameController,
+                      controller: emailController,
                       type: TextInputType.emailAddress,
                       validate: (value) {
                         if (value!.isEmpty) {
@@ -80,7 +83,7 @@ class SocialRegisterScreen extends StatelessWidget {
                       height: 16,
                     ),
                     defaultFormFiled(
-                      controller: emailController,
+                      controller: phoneController,
                       type: TextInputType.emailAddress,
                       validate: (value) {
                         if (value!.isEmpty) {
@@ -94,8 +97,8 @@ class SocialRegisterScreen extends StatelessWidget {
                       height: 16,
                     ),
                     defaultFormFiled(
-                        controller: phoneController,
-                        type: TextInputType.emailAddress,
+                        controller: passwordController,
+                        type: TextInputType.text,
                         validate: (value) {
                           //  return 'please enter password !';
                         },
@@ -109,17 +112,19 @@ class SocialRegisterScreen extends StatelessWidget {
                       height: 16,
                     ),
                     ConditionalBuilder(
-                      condition: state is! LoginLoadState,
+                      condition: state is! RegisterLoadState,
                       builder: (context) => SizedBox(
                         width: double.infinity,
                         height: 50,
                         child: MaterialButton(
                           onPressed: () {
-                            /* if (formKey.currentState!.validate()) {
-                              RegisterCubit.get(context)(
+                            if (formKey.currentState!.validate()) {
+                              RegisterCubit.get(context).userRegister(
+                                  name: nameController.text,
+                                  phone: phoneController.text,
                                   email: emailController.text,
                                   password: passwordController.text);
-                            }*/
+                            }
                           },
                           color: Colors.blueAccent,
                           child: const Text(

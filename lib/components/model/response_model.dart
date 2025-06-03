@@ -1,8 +1,9 @@
 import 'package:social_application/components/model/user_model.dart';
 
 class ResponseModel {
+  ResponseModel();
   String? message;
-  bool? status;
+  bool status = false;
   User? data;
 
   ResponseModel.fromJson(Map<String, dynamic> json) {

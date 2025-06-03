@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,24 +13,17 @@ class LoginCubit extends Cubit<LoginState> {
   static LoginCubit get(context) => BlocProvider.of(context);
 
   void userLogin({required String email, required String password}) {
-    ResponseModel responseModel;
-    // User user;
+    ResponseModel responseModel = ResponseModel(); // User user;
 
     emit(LoginLoadState());
-    DioHelper.postDate(
-        url: 'login',
-        data: {'email': email, 'password': password}).then((value) {
-      responseModel = ResponseModel.fromJson(value.data);
-      // user = User.fromJson(responseModel.data);
-
-/*      print(responseModel.message);
-      print(responseModel.status);
-      print('-------------------------------');
-      print(user.name);
-      print(user.token);*/
-      emit(LoginSuccessState(responseModel));
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      print('SUCCESS LOGIN');
+      print(value.user);
+      emit(LoginSuccessState(value.user!.uid));
     }).catchError((error) {
-      //   print(error.toString());
+      print(error.toString());
       emit(LoginErrorState(error: error.toString()));
     });
   }

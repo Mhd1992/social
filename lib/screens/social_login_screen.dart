@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_application/components/widget_main.dart';
 import 'package:social_application/cubit/login/login_cubit.dart';
+import 'package:social_application/layouts/social_layout.dart';
 import 'package:social_application/local/cache_helper.dart';
 import 'package:social_application/screens/social_register_screen.dart';
 
@@ -22,21 +23,13 @@ class SocialLoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            if (state.responseModel.status!) {
-              showToastMessage(
-                  message: state.responseModel.message.toString(),
-                  state: ToastState.success);
-              CacheHelper.saveData(
-                  key: 'token', value: state.responseModel.data!.token);
-              print('token is ${state.responseModel.data!.token}');
-              Future.delayed(const Duration(seconds: 1));
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Container()));
-            } else {
-              showToastMessage(
-                  message: state.responseModel.message.toString(),
-                  state: ToastState.error);
-            }
+            // showToastMessage(message: 'login done', state: ToastState.success);
+
+            CacheHelper.saveData(key: 'uId', value: state.uId).then((val) {
+              if (context.mounted) {
+                navigateTo(context, const SocialLayout());
+              }
+            });
           }
         },
         builder: (context, state) {

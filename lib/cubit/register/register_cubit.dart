@@ -1,42 +1,49 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_application/components/model/response_model.dart';
 import 'package:social_application/cubit/register/register_state.dart';
+import 'package:social_application/model/user_model.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(RegisterInitialState());
 
   static RegisterCubit get(context) => BlocProvider.of(context);
 
-  /* void userRegister(
+  void userRegister(
       {required String name,
       required String email,
       required String phone,
       required String password}) {
-    ResponseModel responseModel;
-    // User user;
-
     emit(RegisterLoadState());
-    DioHelper.postDate(
-        url: 'login',
-        data: {'email': email, 'password': password}).then((value) {
-      responseModel = ResponseModel.fromJson(value.data);
-      // user = User.fromJson(responseModel.data);
-
-*/ /*      print(responseModel.message);
-      print(responseModel.status);
-      print('-------------------------------');
-      print(user.name);
-      print(user.token);*/ /*
-      emit(RegisterSuccessState(responseModel));
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      userCreate(name: name, email: email, phone: phone, uId: value.user!.uid);
     }).catchError((error) {
-      //   print(error.toString());
       emit(RegisterErrorState(message: error.toString()));
     });
   }
 
-  IconData suffixIcon = Icons.visibility_off;
-  bool isPassword = true;*/
+  void userCreate({
+    required String name,
+    required String email,
+    required String phone,
+    required String uId,
+  }) {
+    UserModel userModel = UserModel(name, phone, email, uId, false);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .set(userModel.toMap())
+        .then((val) {
+      emit(CreateUserSuccess());
+    }).catchError((error) {
+      emit(CreateUserErrorSuccess(error: error.toString()));
+    });
+  }
 
   void getVisibilityIcon() {
     emit(ChangeIconState());
@@ -44,6 +51,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   IconData suffixIcon = Icons.visibility_off;
   bool isPassword = true;
+
   void changePasswordVisibility() {
     isPassword = !isPassword;
     suffixIcon = isPassword ? Icons.visibility : Icons.visibility_off;
