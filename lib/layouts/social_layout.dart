@@ -7,6 +7,7 @@ import 'package:social_application/components/widget_main.dart';
 import 'package:social_application/cubit/social/social_cubit.dart';
 import 'package:social_application/local/cache_helper.dart';
 import 'package:social_application/model/user_model.dart';
+import 'package:social_application/screens/new_post/new_post_screen.dart';
 
 import '../cubit/social/social_state.dart';
 
@@ -18,7 +19,9 @@ class SocialLayout extends StatelessWidget {
     final cubit = SocialCubit.get(context);
 
     return BlocConsumer<SocialCubit, SocialState>(listener: (context, state) {
-      // TODO: implement listener
+      if (state is AddNewPostState) {
+        navigateTo(context, NewPostScreen());
+      }
     }, builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
@@ -43,6 +46,11 @@ class SocialLayout extends StatelessWidget {
                   IconBroken.Chat,
                 ),
                 label: 'Chat'),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  IconBroken.Paper_Negative,
+                ),
+                label: 'AddPost'),
             BottomNavigationBarItem(
                 icon: Icon(IconBroken.Location), label: 'Location'),
             BottomNavigationBarItem(

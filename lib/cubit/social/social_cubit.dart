@@ -8,6 +8,7 @@ import 'package:social_application/local/cache_helper.dart';
 import 'package:social_application/model/user_model.dart';
 import 'package:social_application/screens/chats/chat_screens.dart';
 import 'package:social_application/screens/feeds/feed_screens.dart';
+import 'package:social_application/screens/new_post/new_post_screen.dart';
 import 'package:social_application/screens/settings/settings_screens.dart';
 import 'package:social_application/screens/users/user_screens.dart';
 
@@ -47,14 +48,20 @@ class SocialCubit extends Cubit<SocialState> {
   List<Widget> screens = [
     const FeedScreens(),
     const ChatScreens(),
+    const NewPostScreen(),
     const UserScreens(),
     const SettingsScreens(),
   ];
 
-  List<String> titles = ['New Feeds', 'Chat', 'Users', 'Settings'];
+  List<String> titles = ['New Feeds', 'Chat', 'NewPost', 'Users', 'Settings'];
 
   void selectBottomNav(int index) {
-    currentIndex = index;
-    emit(ChangeBottomNaveState());
+    if (index == 2) {
+      currentIndex = 0;
+      emit(AddNewPostState());
+    } else {
+      currentIndex = index;
+      emit(ChangeBottomNaveState());
+    }
   }
 }

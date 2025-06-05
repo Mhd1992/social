@@ -33,7 +33,13 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String phone,
     required String uId,
   }) {
-    UserModel userModel = UserModel(name, phone, email, uId, false);
+    UserModel userModel = UserModel(
+        name,
+        phone,
+        email,
+        uId,
+        'https://www.freepik.com/free-vector/blue-circle-with-white-user_145857007.htm#fromView=keyword&page=1&position=0&uuid=a069a414-4290-43af-9044-94d2f8656844&query=Default+User',
+        false);
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
