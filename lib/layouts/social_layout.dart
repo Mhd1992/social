@@ -1,12 +1,9 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_application/components/icon_broken.dart';
 import 'package:social_application/components/widget_main.dart';
 import 'package:social_application/cubit/social/social_cubit.dart';
-import 'package:social_application/local/cache_helper.dart';
-import 'package:social_application/model/user_model.dart';
+
 import 'package:social_application/screens/new_post/new_post_screen.dart';
 
 import '../cubit/social/social_state.dart';

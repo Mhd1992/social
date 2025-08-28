@@ -1,3 +1,5 @@
+import 'package:firebase_app_check/firebase_app_check.dart'
+    show FirebaseAppCheck;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import 'package:social_application/screens/social_login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
   await CacheHelper.ini();
 
   uId = CacheHelper.getData(key: 'uId');
@@ -32,7 +35,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => SocialCubit()..getUserDate())
+        BlocProvider(
+            create: (context) => SocialCubit()
+              ..getUserDate()
+              ..getAllPosts()
+              ..getAllUsers())
       ],
       child: MaterialApp(
         title: 'SocialApp',

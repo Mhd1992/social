@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:social_application/components/model/response_model.dart';
 import 'package:social_application/cubit/register/register_state.dart';
 import 'package:social_application/model/user_model.dart';
 
@@ -34,12 +33,14 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String uId,
   }) {
     UserModel userModel = UserModel(
-        name,
-        phone,
-        email,
-        uId,
-        'https://www.freepik.com/free-vector/blue-circle-with-white-user_145857007.htm#fromView=keyword&page=1&position=0&uuid=a069a414-4290-43af-9044-94d2f8656844&query=Default+User',
-        false);
+        name: name,
+        phone: phone,
+        email: email,
+        uId: uId,
+        image:
+            'https://static.vecteezy.com/system/resources/thumbnails/036/324/708/small/ai-generated-picture-of-a-tiger-walking-in-the-forest-photo.jpg',
+        bio: 'write your bio ...',
+        isEmailVerified: false);
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
